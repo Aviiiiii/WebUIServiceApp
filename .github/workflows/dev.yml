@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+      working-directory: ${{ github.workspace }}/webuiserviceapp
+
+    - name: Archive Production Build
+      uses: actions/upload-artifact@v2
+      with:
+        name: build
+        path: build
+      
